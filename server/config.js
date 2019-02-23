@@ -1,7 +1,6 @@
 let config = {
     port : process.env["PORT"] || 3015,
-    //mongo_url: "mongodb://etojemiha:admin123@ds147033.mlab.com:47033/heroku_ggxqz9r1"
-    mongo_url: process.env["MONGODB_URI"] || "mongodb://localhost:27017/dnc_hackaton",
+    mongo_url: process.env["MONGODB_URI"] || "mongodb://donothingclub:porter2556@ds021356.mlab.com:21356/dnc_hackathon",
     cloudinary: {
         cloud_name: "doulmg780",
         api_key: "698981441516159",
