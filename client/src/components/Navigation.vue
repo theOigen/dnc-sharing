@@ -5,8 +5,15 @@
       <v-list>
         <v-list-tile>
           <v-list-tile-content>
-            <v-btn flat to="/events">
-              <span class="mr-2">События</span>
+            <v-btn flat to="/login">
+              <span class="mr-2">Вход</span>
+            </v-btn>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-content>
+            <v-btn flat to="/register">
+              <span class="mr-2">Регистрация</span>
             </v-btn>
           </v-list-tile-content>
         </v-list-tile>
@@ -26,8 +33,11 @@
     </v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items class="hidden-sm-and-down">
-      <v-btn flat to="/events">
-        <span class="mr-2">Показы</span>
+      <v-btn flat to="/login">
+        <span class="mr-2">Вход</span>
+      </v-btn>
+      <v-btn flat to="/register">
+        <span class="mr-2">Регистрация</span>
       </v-btn>
       <v-btn flat to="/about">
         <span class="mr-2">О проекте</span>
