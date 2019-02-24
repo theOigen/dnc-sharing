@@ -5,7 +5,7 @@ const EventSchema = new mongoose.Schema({
     description: { type: String, require: true },
     isOpen: { type: Boolean, default: true },
     author: { type: mongoose.mongo.ObjectId, ref: "User", required: true },
-    place: { type: mongoose.mongo.ObjectId, ref: "User", required: true },
+    place: { type: mongoose.mongo.ObjectId, ref: "Placement", required: true },
     avaUrl: { type: String, require: true },
     keywords: [{ type: String, require: true }],
     addedAt: { type: Date, default: Date.now },
@@ -35,11 +35,11 @@ class Event extends Storage {
     }
 
     static getAll() {
-        return EventModel.find();
+        return EventModel.find().populate("author").populate("place").exec();
     }
 
     static getById(id) {
-        return EventModel.findOne({ _id: id }).populate("author");
+        return EventModel.findOne({ _id: id }).populate("author").populate("place").exec();
     }
 
 

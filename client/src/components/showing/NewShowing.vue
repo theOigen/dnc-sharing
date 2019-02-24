@@ -35,6 +35,7 @@
         ></v-textarea>
         <v-layout row justify-center mb-2>
           <input
+            
             type="file"
             ref="file"
             name="file"
@@ -45,6 +46,7 @@
             accept="image/png, image/jpeg"
             class="inputfile inputfile-2"
           >
+          <v-select :items="placesToStr(places)" v-model="selectedPlace" label="Место"></v-select>
           <label for="file-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
               <path
@@ -55,7 +57,7 @@
           </label>
         </v-layout>
         <v-layout row justify-center>
-          <v-btn @click="createShowing" :disabled="buttonActive">Создать</v-btn>
+          <v-btn @click="submit" :disabled="buttonActive">Создать</v-btn>
         </v-layout>
       </form>
     </v-layout>
@@ -67,11 +69,17 @@ export default {
   data() {
     return {
       title: "",
+      places: [],
+      selectedPlace: "",
       keywords: "",
       description: "",
       file: null,
       isLoading: false
     };
+  },
+  async mounted() {
+    this.places = await this.$store.dispatch("getPlaces");
+    console.log("mounted", this.places);
   },
   computed: {
     buttonActive() {
@@ -92,6 +100,25 @@ export default {
       this.$refs.fileSpan.innerText = "Choose a file...";
       this.file = null;
     },
+    submit() {
+      this.$store
+        .dispatch("NewEvent", {
+          title: this.title,
+          keywords: this.keywords,
+          description: this.description,
+          place: this.selectedPlace,
+          ava: this.file
+        })
+        .then(res => {
+          this.$router.push("/");
+        })
+        .catch(err => console.log("error", err));
+    },
+    placesToStr(places) {
+      let strs = [];
+      for (const place of places) strs.push(place.name);
+      return strs;
+    },
     async createShowing() {
       if (
         this.title.length &&
@@ -102,12 +129,8 @@ export default {
       ) {
         try {
           this.isLoading = true;
-          const formData = new FormData();
-          formData.append("description", this.description);
-          formData.append("title", this.title);
-          formData.append("keywords", this.keywords);
-          formData.append("ava", this.file);
-          await this.$store.dispatch("createShowing", formData);
+    
+          await this.$store.dispatch("NewEvent", {});
           this.$router.push("/");
           this.clearAll();
         } catch (error) {

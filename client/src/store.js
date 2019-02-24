@@ -85,6 +85,45 @@ export default new Vuex.Store({
             });
             axios.post('/api/v1/test', bodyData);
         },
+        async getEvents ({ commit }, {  page, per_page, filters }){
+            let url = `/api/v1/event?page=${page}&per_page=${per_page}&filters=${filters.replace(" ", "+")}`
+            const response = await axios.get(url);
+            console.log(response.data);
+            return response.data;
+            
+        },
+        NewEvent(context, credentials) {
+            const jwt = localStorage.getItem("jwt");
+            const config = {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + jwt
+              }
+            };
+            const formData = new FormData();
+            formData.append("title", credentials.title);
+            formData.append("description", credentials.description);
+            formData.append("keywords", credentials.keywords);
+            formData.append("place", credentials.place);
+            formData.append("ava", credentials.ava);
+            return new Promise((resolve, reject) => {
+              axios.post('/api/v1/event', formData, config)
+                .then(response => {
+                  resolve(response.data)
+                })
+                .catch(err => {
+                  console.log('error: ', err)
+                  reject(err);
+                }
+                )
+            })
+          },
+        async getPlaces (){
+            let url = `/api/v1/places`
+            const response = await axios.get(url);
+            return response.data;
+            
+        },
         async fetchInitialAuth({ commit }) {
             commit("requestInitialAuth");
             const result = await getAuthUser();
