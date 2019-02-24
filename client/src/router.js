@@ -53,13 +53,13 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     // to and from are both route objects
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (store.state.auth.loggedInUser !== null) {
+        if (store.state.auth.loggedInUser) {
             next();
         } else {
             next('/login');
         }
     } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (store.state.auth.loggedInUser !== null) {
+        if (store.state.auth.loggedInUser) {
             next('/');
         } else {
             next();
