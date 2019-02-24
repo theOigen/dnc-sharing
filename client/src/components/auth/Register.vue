@@ -35,7 +35,7 @@
           solo
         ></v-text-field>
         <v-layout row justify-center>
-          <v-btn @click="logIn" :disabled="buttonActive">Войти</v-btn>
+          <v-btn @click="logIn" :disabled="buttonActive">Зарегистрироваться</v-btn>
           <v-btn @click="googleLogin" :disabled="this.isLoading">
             <v-icon>mdi-google</v-icon>
           </v-btn>

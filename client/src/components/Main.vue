@@ -32,56 +32,58 @@
       <!-- <input type="text" placeholder="search by tags"> -->
       <!-- </v-flex> -->
     </v-layout>
-    <v-flex xs12 mb-2 v-for="event in array"  :key="event._id">
+    <v-flex xs12 mb-2 v-for="event in array" :key="event._id">
       <v-card>
         <v-layout row>
-            <v-flex xs4 sm3 md2 mt-1 mb-1 class="scr-img-wrap">
-              <v-img
-                :src="event.avaUrl"
-                class="screening_img"
-                contain
-                aspect-ratio="1.75"
-                left
-              ></v-img>
-            </v-flex>
-            <v-flex xs8 sm9 md10>
+          <v-flex xs4 sm3 md2 mt-1 mb-1 class="scr-img-wrap">
+            <v-img :src="event.avaUrl" class="screening_img" contain aspect-ratio="1.75" left></v-img>
+          </v-flex>
+          <v-flex xs8 sm9 md10>
             <v-card-title class="custom_title">
               <div>
-                <div class="headline">{{event.title}}</div>
+                <div class="headline">
+                  <router-link
+                    class="eventTitle"
+                    :to="{name: 'showing', params: {event: event, id: event._id}}"
+                  >{{event.title}}</router-link>
+                </div>
               </div>
             </v-card-title>
             <div class="title custom_title">Создатель: {{event.author.login}}</div>
             <div class="title custom_title">Место: {{event.place.name}}</div>
-            <div
-              class="screening-desc"
-            >{{event.description}}</div>
+            <div class="screening-desc">{{event.description}}</div>
           </v-flex>
         </v-layout>
         <v-divider light></v-divider>
-        <v-card-actions class="pa-3 ml-2">Тэги: <span class="tag" v-for="tag in event.keywords" :key="tag">{{tag}}</span></v-card-actions>
+        <v-card-actions class="pa-3 ml-2">
+          Тэги:
+          <span class="tag" v-for="tag in event.keywords" :key="tag">{{tag}}</span>
+        </v-card-actions>
       </v-card>
     </v-flex>
   </v-container>
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   data() {
     return {
-      filters : "",
+      filters: "",
       array: []
     };
   },
-  async created(){
-    try{
+  async created() {
+    try {
       const result = await this.$store.dispatch("getEvents", {
-              page: 1,
-              per_page: 5,
-              filters: ""
-            });
+        page: 1,
+        per_page: 5,
+        filters: ""
+      });
       this.array = result.data;
-
-    }catch(err) {console.error(err);}
+    } catch (err) {
+      console.error(err);
+    }
   },
   // watch: {
   //   // эта функция запускается при любом изменении вопроса
@@ -90,15 +92,17 @@ export default {
   //   }
   // },
   methods: {
-    async filterSearch(){
-      try{
-      const result = await this.$store.dispatch("getEvents", {
-              page: 1,
-              per_page: 5,
-              filters: this.filters
-            });
-      this.array = result.data;
-      }catch(err) {console.error(err);}
+    async filterSearch() {
+      try {
+        const result = await this.$store.dispatch("getEvents", {
+          page: 1,
+          per_page: 5,
+          filters: this.filters
+        });
+        this.array = result.data;
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 };
@@ -112,8 +116,8 @@ export default {
 .custom_title {
   padding: 5px;
 }
-.tag{
-  margin:3px;
+.tag {
+  margin: 3px;
 }
 .screening-desc {
   overflow-wrap: break-word;
@@ -122,6 +126,10 @@ export default {
 }
 .scr-img-wrap {
   vertical-align: middle;
+}
+.eventTitle {
+  text-decoration: none;
+  color: inherit;
 }
 .screening_img {
   height: 200px;
