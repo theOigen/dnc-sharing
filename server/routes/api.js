@@ -6,7 +6,7 @@ const { Utils } = require('../models/utils');
 const authJwt = passport.authenticate("jwt", { session: false });
 
 function pagination(array, page, per_page) {
-    const delta = array.length % per_page == 0 ? 0 : 1;
+    const delta = array.length % per_page === 0 ? 0 : 1;
     const maxPage = parseInt(array.length / per_page) + delta;
     if (page > maxPage) page = maxPage;
     let bound = page * per_page;
@@ -18,9 +18,9 @@ function pagination(array, page, per_page) {
     };
 }
 
-router.get('/me', authJwt, (req,res) =>{
+router.get('/me', authJwt, (req, res) => {
 
-    res.json({err: req.user ? null: "Not authorized", user : req.user});
+    res.json({ err: req.user ? null : "Not authorized", user: req.user });
 });
 
 router.get('/event', async (req, res) => {
@@ -38,26 +38,27 @@ router.get('/event', async (req, res) => {
             filtres.forEach(key => {
                 isAvailable = isAvailable
                     && (event.title.includes(key)
-                    || event.keywords.includes(key)
-                    || event.description.includes(key))
+                        || event.keywords.includes(key)
+                        || event.description.includes(key));
             });
             if (isAvailable) {
                 result.push(event);
             }
         });
     res.json(pagination(result, page, per_page));
-})
+});
 
 router.get('/event/:id', async (req, res) => {
     res.json(await Event.getById(id));
-})
+});
+
 router.delete('/event/:id',
     authJwt,
     async (req, res) => {
         const id = req.params.id;
         try {
             const event = await Event.getById(id);
-            if (!req.user || !req.user._id == event.author._id)
+            if (!req.user || !req.user._id === event.author._id)
                 throw new Error("Forbidden");
             await Utils.delete_file_promised(event.avaUrl.substring(event.avaUrl.lastIndexOf('/') + 1));
             const id = await Event.delete(id);

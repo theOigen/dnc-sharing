@@ -33,7 +33,7 @@ class Event extends Storage {
     }
 
     static getAll() {
-        return EventModel.find()
+        return EventModel.find();
     }
 
     static getById(id) {

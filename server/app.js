@@ -40,7 +40,7 @@ mongoose.connect(config.mongo_url, connectOptions)
     .catch((err) => console.log("ERROR: " + err.message));
 
 const authRouter = require("./routes/auth");
-const apiRouter = require("./routes/api")
+const apiRouter = require("./routes/api");
 
 
 function enableCors(req, res, next) {
