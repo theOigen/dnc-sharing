@@ -1,5 +1,5 @@
 const sha256 = require("sha256");
-const config = require("../config")
+const config = require("../config");
 const cloudinary = require('cloudinary');
 const util = require('util');
 cloudinary.config({
@@ -12,8 +12,8 @@ const delete_file_promised = util.promisify(deleteFile);
 function handleFileUpload(fileBuffer, callback) {
     cloudinary.v2.uploader.upload_stream({ resource_type: 'raw' },
         function (error, result) {
-            console.log(result, error)
-            if (error) callback(error)
+            console.log(result, error);
+            if (error) callback(error);
             else callback(null, result);
         })
         .end(fileBuffer);
@@ -25,8 +25,8 @@ function deleteFile(id, callback) {
         err = info.error;
         result = info.result;
         console.log(err, result);
-        if (err) callback(err)
-        else if (result != "ok") callback(new Error("No file to delete"))
+        if (err) callback(err);
+        else if (result !== "ok") callback(new Error("No file to delete"));
         else callback(null, result);
     }, { resource_type: 'raw' });
 }

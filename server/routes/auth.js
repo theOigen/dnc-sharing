@@ -83,7 +83,7 @@ router.post('/oauth/login', async (req, res) => {
       const newUser = new User(login, null, user.fullname, user.ava_url, 'None', user.googleId);
       const newId = await User.insert(newUser);
       //newUser._id = newId.toString();
-      loggedInUser = {login, googleId: user.googleId, ava_url: user.ava_url, fullname: user.fullname, description: "None"};
+      loggedInUser = {login, _id : newId, googleId: user.googleId, ava_url: user.ava_url, fullname: user.fullname, description: "None"};
       isCreated = true;
     }
     const token = jwt.sign(isCreated ? loggedInUser : loggedInUser.toObject(), config.secret, { expiresIn: 86400 * 30 });

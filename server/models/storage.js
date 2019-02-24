@@ -2,50 +2,50 @@ const fs = require('fs-promise');
 const mongoose = require('mongoose');
 
 const StorageSchema = new mongoose.Schema({
-    addedAt: {type: Date, default: Date.now }
-  });
-  
-  const StorageModel = mongoose.model('Storage', StorageSchema);
+    addedAt: { type: Date, default: Date.now }
+});
+
+const StorageModel = mongoose.model('Storage', StorageSchema);
 
 
 
 class Storage {
 
     //static field to overdrive
-    static storage_path(){return '.';};
+    static storage_path() { return '.'; };
 
-    static this_model(){ return StorageModel;};
-    constructor(){}
+    static this_model() { return StorageModel; };
+    constructor() { }
 
-    static check_params(x){return true;}
+    static check_params(x) { return true; }
     // static functions to access storage
     static getById(id) {
-        if(!valid_string(id) && typeof id !== "object")
+        if (!valid_string(id) && typeof id !== "object")
             return Promise.reject(new Error(`Invalid in getById(${id}) arguments`));
-        return this.this_model().findOne({ _id : id});
+        return this.this_model().findOne({ _id: id });
     }
 
-    static isExist(id){
-        let curr_model = this.this_model()
-        return curr_model.find({_id: id})
-            .catch(err =>{
+    static isExist(id) {
+        let curr_model = this.this_model();
+        return curr_model.find({ _id: id })
+            .catch(err => {
                 return Promise.reject(new Error("Entity was not found"));
             })
             .then(x => {
-                if(x.length !== 0) return Promise.resolve(true);
+                if (x.length !== 0) return Promise.resolve(true);
                 else return Promise.reject();
-            })
+            });
     }
     static update(ent) {
-        if(!this.check_params(ent)) 
-            return Promise.reject(new Error("Invalid argument in update "+ this.this_model().modelName + ent.toString()));
+        if (!this.check_params(ent))
+            return Promise.reject(new Error("Invalid argument in update " + this.this_model().modelName + ent.toString()));
         let curr_model = this.this_model();
         console.log(`${curr_model.modelName} UPDATE`);
-        return curr_model.findOneAndUpdate({ _id: ent._id},ent, {upsert : true});
+        return curr_model.findOneAndUpdate({ _id: ent._id }, ent, { upsert: true });
     }
 
     static insert(ent) {
-        if(!this.check_params(ent))
+        if (!this.check_params(ent))
             return Promise.reject(new Error(`Invalid argument in insert(${ent})`));
         let curr_model = this.this_model();
         return new curr_model(ent).save()
@@ -59,15 +59,15 @@ class Storage {
     static setStoragePath(filename) {
         if (typeof filename === 'string'
             && fs.existsSync(filename))
-            this.storage_path = function () { return filename ;};
+            this.storage_path = function () { return filename; };
         else throw new Error("Invalid storage path");
     }
 
     static delete(id) {
-        if(!valid_string(id) && typeof id !== "object") 
+        if (!valid_string(id) && typeof id !== "object")
             Promise.reject(new Error("Invalid argument"));
         let curr_model = this.this_model();
-        return curr_model.findByIdAndRemove(id)
+        return curr_model.findByIdAndRemove(id);
     }
 };
 
@@ -81,10 +81,10 @@ function valid_number(num) {
     return typeof num === 'number'
         && !isNaN(num);
 }
-function valid_string(str){
+function valid_string(str) {
     return typeof str === 'string'
-    && str.length != 0;
-  }
+        && str.length !== 0;
+}
 
 function getStorageData(storage_path) {
     if (!fs.existsSync(storage_path))
