@@ -8,7 +8,7 @@
       <GmapMarker v-for="(marker, index) in markers" :key="index" :position="marker.position"/>
     </GmapMap>
   </div>
-  <div v-else>Локация еще не пределена</div>
+  <div v-else>Локация еще не определена</div>
 </template>
 
 <script>

@@ -38,6 +38,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import Mapa from "./Map";
 export default {
   name: "showing",
@@ -54,10 +55,33 @@ export default {
   },
   data() {
     return {
-      model: "tab-2",
-      text:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+      eve: {}
     };
+  },
+  methods: {
+    async getEve() {
+const id = this.$route.params.id;
+      if (id.length) {
+        try {
+          const event = await this.$store.dispatch("getUserByID", id);
+          this.eve = event;
+        } catch (error) {
+          console.log(error);
+          this.error = error;
+        }
+      }
+    }
+  },
+  mounted() {
+    if (this.event)
+      this.eve = this.event;
+    else
+      this.getEve();
+  },
+  whatch: {
+    $route(to, from) {
+      this.getEve();  
+    }
   }
 };
 </script>

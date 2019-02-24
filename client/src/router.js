@@ -41,7 +41,7 @@ const router = new Router({
             }
         },
         {
-            path: '/showing',
+            path: '/showing/:id',
             name: 'showing',
             component: Showing,
             props: true
@@ -62,15 +62,6 @@ const router = new Router({
             meta: {
                 requiresVisitor: true
             }
-        },
-        {
-            path: '/profile',
-            name: 'profile',
-            component: Profile,
-            meta: {
-                requiresAuth: true
-            },
-            props: true
         },
         {
             path: '/register',
