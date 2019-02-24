@@ -78,6 +78,13 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        async test ({ commit }, {  location }){
+            const bodyData = new URLSearchParams({
+                name: location.formatted_address,
+                coordinates: location.geometry.location
+            });
+            axios.post('/api/v1/test', bodyData);
+        },
         async fetchInitialAuth({ commit }) {
             commit("requestInitialAuth");
             const result = await getAuthUser();

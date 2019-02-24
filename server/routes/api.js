@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Event } = require('../models/event');
+const { Placement } = require('../models/placement');
 const passport = require('passport');
 const { Utils } = require('../models/utils');
 const authJwt = passport.authenticate("jwt", { session: false });
@@ -101,14 +102,15 @@ router.delete('/event/:id',
 router.post('/event',
     authJwt,
     async (req, res) => {
-
+        console.log('i am there')
         try {
             if (!req.user)
                 throw new Error("Forbidden");
             else {
                 const uploadResult = await Utils.handle_file_upload_promised(Buffer.from(new Uint8Array(req.files.ava.data)));
+                const place = await Placement.getByName(req.body.place);
                 res.json(await Event.insert(
-                    new Event(req.body.title, req.body.description, req.user._id, uploadResult.url, req.body.keywords.split(" "))
+                    new Event(req.body.title, req.body.description, req.user._id, uploadResult.url, req.body.keywords.split(" "), place._id)
                 ));
             }
         }
@@ -116,6 +118,19 @@ router.post('/event',
             res.json({ err: err.message });
         }
     });
+router.post('/test', (req, res) => {
+    const c = req.body.coordinates;
+    const x = parseFloat(c.substring(c.indexOf('(')+1, c.indexOf(',')))
+    const y = parseFloat(c.substring(c.indexOf(',')+2, c.indexOf(')')))
+    Placement.insert(
+        new Placement(req.body.name, x, y)
+    )
+    res.json({});
+})
+
+
+
+
 
 module.exports = router;
 
