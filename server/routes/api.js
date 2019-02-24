@@ -69,40 +69,10 @@ router.delete('/event/:id',
             res.status(400).json({ err: err.message });
         }
     });
-
-// router.put('/articles',
-//     authJwt,
-//     async (req, res) => {
-//         const currentPage = !req.query.page || isNaN(Number(req.query.page)) || Number(req.query.page) <= 0 ? 1 : Number(req.query.page);
-//         if (!req.body.id) res.json({ errorCode: 400, errorMassage: 'Bad request' });
-//         else {
-//             try {
-//                 let art = await Article.getArticleByID(req.body.id);
-//                 if (!req.user || !req.user._id == art.author._id) {
-//                     res.json({ errorCode: 400, errorMassage: "Недостаточно привелегий" });
-//                     return;
-//                 }
-//                 art.shortReview = req.body.shortReview ? req.body.shortReview : art.shortReview;
-//                 art.title = req.body.title ? req.body.title : art.title;
-//                 art.likes = req.body.likes ? Number(req.body.likes) : art.likes;
-//                 art.text = req.body.text ? Article.textTranslation(req.body.text) : art.text;
-//                 if (req.files.Ava) {
-//                     await Utils.delete_file_promised(art.avaUrl.substring(art.avaUrl.lastIndexOf('/') + 1));
-//                     const result = await Utils.handle_file_upload_promised(Buffer.from(new Uint8Array(req.files.Ava.data)));
-//                     art.avaUrl = result.url;
-//                 }
-//                 const updatedArticle = await Article.update(art);
-//                 res.json(articleToResult(updatedArticle, currentPage, req.user));
-//             }
-//             catch (err) {
-//                 res.json({ errorCode: 400, errorMassage: err.message, errorStack: err.stack });
-//             }
-//         }
-//     });
 router.post('/event',
     authJwt,
     async (req, res) => {
-        console.log('i am there')
+        console.log('i am there');
         try {
             if (!req.user)
                 throw new Error("Forbidden");
@@ -120,13 +90,13 @@ router.post('/event',
     });
 router.post('/test', (req, res) => {
     const c = req.body.coordinates;
-    const x = parseFloat(c.substring(c.indexOf('(')+1, c.indexOf(',')))
-    const y = parseFloat(c.substring(c.indexOf(',')+2, c.indexOf(')')))
+    const x = parseFloat(c.substring(c.indexOf('(') + 1, c.indexOf(',')));
+    const y = parseFloat(c.substring(c.indexOf(',') + 2, c.indexOf(')')));
     Placement.insert(
         new Placement(req.body.name, x, y)
-    )
+    );
     res.json({});
-})
+});
 
 
 
