@@ -21,7 +21,7 @@ async function getAuthUser() {
             console.log("fetched");
             const data = await response.data;
             if (data.err) throw new Error(data.err);
-            user = data;
+            user = data.user;
         } catch (error) {
             err = error.response.data.err;
             console.log(err);
@@ -81,6 +81,7 @@ export default new Vuex.Store({
         async fetchInitialAuth({ commit }) {
             commit("requestInitialAuth");
             const result = await getAuthUser();
+            console.log("RESULT", result);
             commit("receiveInitialAuth", result);
             return result;
         },

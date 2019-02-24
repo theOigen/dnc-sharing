@@ -39,12 +39,30 @@
       <v-btn flat to="/register" v-if="!$store.state.auth.loggedInUser">
         <span class="mr-2">Регистрация</span>
       </v-btn>
+      <v-btn
+        flat
+        :to="{ name: 'profile', params: { id: loggedInUser._id, usr: loggedInUser } }"
+        v-if="$store.state.auth.loggedInUser"
+      >
+        <span class="mr-2">Профиль</span>
+      </v-btn>
       <v-btn flat to="/about">
         <span class="mr-2">О проекте</span>
       </v-btn>
     </v-toolbar-items>
   </v-toolbar>
 </template>
+
+<script>
+export default {
+  computed: {
+    loggedInUser() {
+      return this.$store.state.auth.loggedInUser;
+    }
+  }
+};
+</script>
+
 
 <style lang="css">
 .toolbar-title {
