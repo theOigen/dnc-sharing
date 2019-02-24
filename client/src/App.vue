@@ -39,6 +39,13 @@ export default {
     return {
       //
     };
+  },
+  sockets: {
+    connect() {
+      if (this.$store.state.user._id) {
+        this.$socket.emit("loggedUser", this.$store.state.auth.loggedInUser._id);
+      }
+    }
   }
 };
 </script>

@@ -33,7 +33,7 @@ class Comment extends Storage{
   }
 
 
-  static getByEventId(eventId){
+  static getByEventId(eventId) {
       this.this_model().find({event : eventId}).populate("user").populate("event").exec();
   }
 };
@@ -42,7 +42,7 @@ function valid_number(num) {
   return typeof num === 'number'
       && !isNaN(num);
 }
-function valid_string(str){
+function valid_string(str) {
   return typeof str === 'string'
   && str.length !== 0;
 }

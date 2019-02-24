@@ -61,6 +61,11 @@
         </v-card-actions>
       </v-card>
     </v-flex>
+    <v-flex xs12 mb-4>
+        <v-layout justify-center>
+          <v-pagination v-model="page" :length="pages" total-visible="7" @input="changePage"></v-pagination>
+        </v-layout>
+      </v-flex>
   </v-container>
 </template>
 
@@ -70,7 +75,9 @@ export default {
   data() {
     return {
       filters: "",
-      array: []
+      array: [],
+      page: 1,
+      pages: 0
     };
   },
   async created() {
@@ -81,6 +88,8 @@ export default {
         filters: ""
       });
       this.array = result.data;
+      this.page = result.page;
+      this.pages = result.maxPage;
     } catch (err) {
       console.error(err);
     }
@@ -103,6 +112,21 @@ export default {
       } catch (err) {
         console.error(err);
       }
+    },
+    async changePage() {
+      console.log(this.page);
+      try {
+      const result = await this.$store.dispatch("getEvents", {
+        page: 1,
+        per_page: 5,
+        filters: this.filters
+      });
+      this.array = result.data;
+      this.page = result.page;
+      this.pages = result.maxPage;
+    } catch (err) {
+      console.error(err);
+    }
     }
   }
 };

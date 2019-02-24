@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VeeValidate from 'vee-validate'
+import VueSocketIO from 'vue-socket.io'
 import GoogleAuth from 'vue-google-oauth2'
 
 Vue.config.productionTip = false
@@ -22,6 +23,16 @@ Vue.use(GoogleAuth, {
   scope: 'profile email',
   promt: 'select_account'
 });
+
+Vue.use(new VueSocketIO({
+  debug: false,
+  
+  connection: 'http://localhost:3014',
+  vuex: {
+      store,
+      actionPrefix: 'SOCKET_'
+  }
+}));
 
 new Vue({
   router,

@@ -11,6 +11,10 @@ const passport = require('passport');
 
 const app = express();
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+require('./modules/socket')(io);
+
 const publicPath = path.join(__dirname, 'public');
 
 app.use(cors());
@@ -36,7 +40,7 @@ const connectOptions = {
 mongoose.connect(config.mongo_url, connectOptions)
     .then((x) => {
         console.log("Mongo database connected " + mongoose.connection);
-        app.listen(config.port, function () { console.log(`Server is ready on port ${config.port}\n` + publicPath); });
+        http.listen(config.port, function () { console.log(`Server is ready on port ${config.port}\n` + publicPath); });
     })
     .catch((err) => console.log("ERROR: " + err.message));
 
