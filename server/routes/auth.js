@@ -26,7 +26,7 @@ router.post('/register', (req, res, next) => {
     console.log(pass);
     const hashedPass = Utils.hash(pass);
     console.log(hashedPass);
-    const user = new User(login, hashedPass, fullname, '/images/users/user_pic.png', 'None');
+    const user = new User(login, hashedPass, fullname, 'https://res.cloudinary.com/boring-messenger/image/upload/v1541626236/default.png', 'None');
 
     console.log(user);
 
@@ -56,7 +56,7 @@ const authCallback = (req, res) => {
       jwt.verify(token, config.secret, function (err, data) {
         console.log(err, data);
       });
-      return res.json({ user: loggedInUser, token });
+      return res.json({ user, token });
     });
   })(req, res);
 };
@@ -80,7 +80,7 @@ router.post('/oauth/login', async (req, res) => {
       const newUser = new User(login, null, user.fullname, user.ava_url, 'None', user.googleId);
       const newId = await User.insert(newUser);
       //newUser._id = newId.toString();
-      loggedInUser = {login, _id : newId, googleId: user.googleId, ava_url: user.ava_url, fullname: user.fullname, description: "None"};
+      loggedInUser = { login, _id: newId, googleId: user.googleId, ava_url: user.ava_url, fullname: user.fullname, description: "None" };
       isCreated = true;
     }
     const token = jwt.sign(isCreated ? loggedInUser : loggedInUser.toObject(), config.secret, { expiresIn: 86400 * 30 });

@@ -19,8 +19,26 @@
         </v-list-tile>
         <v-list-tile>
           <v-list-tile-content>
+            <v-btn
+              flat
+              :to="{ name: 'profile', params: { id: loggedInUser._id, usr: loggedInUser } }"
+              v-if="$store.state.auth.loggedInUser"
+            >
+              <span class="mr-2">Профиль</span>
+            </v-btn>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-content>
             <v-btn flat to="/about">
               <span class="mr-2">О проекте</span>
+            </v-btn>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile>
+          <v-list-tile-content>
+            <v-btn flat v-if="$store.state.auth.loggedInUser" to="/logout">
+              <span class="mr-2">Выйти</span>
             </v-btn>
           </v-list-tile-content>
         </v-list-tile>
@@ -48,6 +66,9 @@
       </v-btn>
       <v-btn flat to="/about">
         <span class="mr-2">О проекте</span>
+      </v-btn>
+      <v-btn flat v-if="$store.state.auth.loggedInUser" to="/logout">
+        <span class="mr-2">Выйти</span>
       </v-btn>
     </v-toolbar-items>
   </v-toolbar>

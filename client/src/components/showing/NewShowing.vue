@@ -35,7 +35,6 @@
         ></v-textarea>
         <v-layout row justify-center mb-2>
           <input
-            
             type="file"
             ref="file"
             name="file"
@@ -65,6 +64,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   data() {
     return {
@@ -129,7 +129,7 @@ export default {
       ) {
         try {
           this.isLoading = true;
-    
+
           await this.$store.dispatch("NewEvent", {});
           this.$router.push("/");
           this.clearAll();
