@@ -75,6 +75,7 @@ router.delete('/event/:id',
         }
     });
 
+
 router.put('/user/:id',
     authJwt,
     async (req, res) => {
@@ -119,13 +120,14 @@ router.post('/event',
     });
 router.post('/test', (req, res) => {
     const c = req.body.coordinates;
-    const x = parseFloat(c.substring(c.indexOf('(') + 1, c.indexOf(',')))
-    const y = parseFloat(c.substring(c.indexOf(',') + 2, c.indexOf(')')))
+
+    const x = parseFloat(c.substring(c.indexOf('(') + 1, c.indexOf(',')));
+    const y = parseFloat(c.substring(c.indexOf(',') + 2, c.indexOf(')')));
     Placement.insert(
         new Placement(req.body.name, x, y)
-    )
+    );
     res.json({});
-})
+});
 
 
 
