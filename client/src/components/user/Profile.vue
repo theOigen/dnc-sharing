@@ -69,14 +69,14 @@
               <label for="username" style="font-weight:bold">Био:</label>
             </v-flex>
             <v-flex xs5>
-              <v-textarea no-resize solo :readonly="!editing" :value="user.description"></v-textarea>
+              <v-textarea no-resize solo :readonly="!editing" v-model.trim="user.description"></v-textarea>
             </v-flex>
           </v-layout>
         </v-layout>
       </v-flex>
     </v-layout>
     <v-layout row justify-center>
-      <v-btn @click="editUser()" v-if="!editing">Edit</v-btn>
+      <v-btn @click="editUser()" :disabled="isLoading" v-if="!editing">Edit</v-btn>
       <v-btn @click="finishEdit()" v-if="editing" :disabled="buttonActive">Finish</v-btn>
       <v-btn @click="cancelEdit()" v-if="editing">Cancel</v-btn>
     </v-layout>
@@ -154,6 +154,8 @@ export default {
     },
     async finishEdit() {
       this.editing = false;
+      console.log(this.user);
+      console.log(this.beforeEditCache);
       if (
         (this.user.fullname !== this.beforeEditCache.fullname ||
           this.newAva ||
@@ -162,16 +164,11 @@ export default {
       ) {
         try {
           this.isLoading = true;
-          const formData = new FormData();
-          if (this.newAva) formData.append("image", this.newAva);
-          formData.append("fullname", this.user.fullname);
-          formData.append("description", this.user.description);
-          const updated = await this.$store.dispatch("updateUser", {
-            userId: this.user._id,
-            formData
-          });
-          if (updated.avaUrl !== this.user.avaUrl)
-            this.user.avaUrl = updated.avaUrl;
+          const response = await this.$store.dispatch("fetchUserUpdate", {id: this.user._id, fullname : this.user.fullname, description: this.user.description, ava: this.newAva });
+          const updated = response.user;
+          console.log(updated);
+          if (updated.ava_url !== this.user.ava_url)
+            this.user.ava_url = updated.ava_url;
         } catch (error) {
           console.log(error);
         }
