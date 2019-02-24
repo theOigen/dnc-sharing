@@ -1,5 +1,5 @@
 let config = {
-    port : process.env["PORT"] || 3015,
+    port : process.env["PORT"] || 3014,
     mongo_url: process.env["MONGODB_URI"] || "mongodb://donothingclub:porter2556@ds021356.mlab.com:21356/dnc_hackathon",
     cloudinary: {
         cloud_name: "doulmg780",

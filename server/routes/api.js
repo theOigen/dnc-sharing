@@ -18,6 +18,11 @@ function pagination(array, page, per_page) {
     };
 }
 
+router.get('/me', authJwt, (req,res) =>{
+
+    res.json({err: req.user ? null: "Not authorized", user : req.user});
+});
+
 router.get('/event', async (req, res) => {
     const filtres = req.query.filtres ? req.query.filtres.split(" ") : null;
     const page = req.query.page > 0 ? Number(req.query.page) : 1;
