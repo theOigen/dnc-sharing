@@ -55,7 +55,7 @@ router.get('/event', async (req, res) => {
 });
 
 router.get('/event/:id', async (req, res) => {
-    res.json(await Event.getById(id));
+    res.json(await Event.getById(req.params.id));
 });
 
 router.delete('/event/:id',
@@ -81,8 +81,8 @@ router.put('/user/:id',
     async (req, res) => {
         try {
             console.log('id', req.params.id);
-            console.log('_id',req.user._id);
-            if (!req.params.id || req.user._id.toString() !== req.params.id )
+            console.log('_id', req.user._id);
+            if (!req.params.id || req.user._id.toString() !== req.params.id)
                 throw new Error("Forbidden");
             req.user.fullname = req.body.fullname ? req.body.fullname : req.user.fullname;
             req.user.description = req.body.description ? req.body.description : req.user.description;
@@ -91,12 +91,12 @@ router.put('/user/:id',
                 const result = await Utils.handle_file_upload_promised(Buffer.from(new Uint8Array(req.files.ava.data)));
                 req.user.ava_url = result.url;
             }
-            res.json({user: await User.update(req.user)});
+            res.json({ user: await User.update(req.user) });
         }
         catch (err) {
             res.status(400).json({ err: err.message });
         }
-        
+
     });
 router.post('/event',
     authJwt,

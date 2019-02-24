@@ -44,16 +44,16 @@ export default new Vuex.Store({
             authError: null,
             initialAuthError: null
         },
-        user:{
-          isFetchingUpdate: false,
-          oldUser: null
+        user: {
+            isFetchingUpdate: false,
+            oldUser: null
         }
     },
     mutations: {
-        requestUserUpdate(state){
+        requestUserUpdate(state) {
             state.user.isFetchingUpdate = true;
         },
-        receiveUserUpdare(state){
+        receiveUserUpdare(state) {
             state.user.isFetchingUpdate = false;
         },
         requestInitialAuth(state) {
@@ -88,53 +88,59 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async test ({ commit }, {  location }){
+        async test({ commit }, { location }) {
             const bodyData = new URLSearchParams({
                 name: location.formatted_address,
                 coordinates: location.geometry.location
             });
             axios.post('/api/v1/test', bodyData);
         },
-        async getEvents ({ commit }, {  page, per_page, filters }){
+        async getEvent({ commit }, id) {
+            const url = `/api/v1/event/${id}`
+            const response = await axios.get(url);
+            console.log(response.data);
+            return response.data;
+        },
+        async getEvents({ commit }, { page, per_page, filters }) {
             let url = `/api/v1/event?page=${page}&per_page=${per_page}&filters=${filters.replace(" ", "+")}`
             const response = await axios.get(url);
             console.log(response.data);
             return response.data;
-            
+
         },
-        async fetchUserUpdate ({ commit }, { id, fullname, description, ava }){
+        async fetchUserUpdate({ commit }, { id, fullname, description, ava }) {
             const jwt = localStorage.getItem("jwt");
             const config = {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + jwt
-              }
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + jwt
+                }
             };
 
-            const res ={err: null, user: null};
+            const res = { err: null, user: null };
             const formData = new FormData();
             formData.append("fullname", fullname);
             formData.append("description", description);
-            if(ava) formData.append("ava", ava);
-            try{
+            if (ava) formData.append("ava", ava);
+            try {
                 const response = await axios.put(`/api/v1/user/${id.toString()}`, formData, config);
                 res.user = response.data.user;
 
-            }catch(err){
+            } catch (err) {
                 console.error(err);
                 res.err = err.response.data.err;;
             }
             return res;
 
-            
+
         },
         NewEvent(context, credentials) {
             const jwt = localStorage.getItem("jwt");
             const config = {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + jwt
-              }
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer ' + jwt
+                }
             };
             const formData = new FormData();
             formData.append("title", credentials.title);
@@ -143,22 +149,22 @@ export default new Vuex.Store({
             formData.append("place", credentials.place);
             formData.append("ava", credentials.ava);
             return new Promise((resolve, reject) => {
-              axios.post('/api/v1/event', formData, config)
-                .then(response => {
-                  resolve(response.data)
-                })
-                .catch(err => {
-                  console.log('error: ', err)
-                  reject(err);
-                }
-                )
+                axios.post('/api/v1/event', formData, config)
+                    .then(response => {
+                        resolve(response.data)
+                    })
+                    .catch(err => {
+                        console.log('error: ', err)
+                        reject(err);
+                    }
+                    )
             })
-          },
-        async getPlaces (){
+        },
+        async getPlaces() {
             let url = `/api/v1/places`
             const response = await axios.get(url);
             return response.data;
-            
+
         },
         async fetchInitialAuth({ commit }) {
             commit("requestInitialAuth");
