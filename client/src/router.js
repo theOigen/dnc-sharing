@@ -21,6 +21,11 @@ const router = new Router({
             component: Home
         },
         {
+            path: '/test',
+            name: 'test',
+            component: Test
+        },
+        {
             path: '/about',
             name: 'about',
             component: About
@@ -41,6 +46,15 @@ const router = new Router({
             meta: {
                 requiresVisitor: true
             }
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile,
+            meta: {
+                requiresAuth: true
+            },
+            props: true
         },
         {
             path: '/register',
