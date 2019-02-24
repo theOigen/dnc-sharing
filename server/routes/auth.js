@@ -56,7 +56,7 @@ const authCallback = (req, res) => {
       jwt.verify(token, config.secret, function (err, data) {
         console.log(err, data);
       });
-      return res.json({ user, token });
+      return res.json({ user: loggedInUser, token });
     });
   })(req, res);
 };

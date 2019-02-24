@@ -22,6 +22,7 @@ app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(busboyBodyParser({ limit: '15mb' }));
+app.disable('etag');
 
 require("./modules/passport");
 

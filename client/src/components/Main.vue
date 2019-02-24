@@ -21,39 +21,44 @@
         clear-icon
         xs10
         md10
+        v-model.trim="filters"
       ></v-text-field>
+      <v-btn @click="filterSearch" xs2 md2 class="my-3" icon small>
+        <v-icon>search</v-icon>
+      </v-btn>
       <v-btn xs2 md2 class="my-3" icon small to="/newShowing">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <!-- <input type="text" placeholder="search by tags"> -->
       <!-- </v-flex> -->
     </v-layout>
-    <v-flex xs12 mb-2 v-for="item in array" :key="item.id">
+    <v-flex xs12 mb-2 v-for="event in array"  :key="event._id">
       <v-card>
         <v-layout row>
-          <v-flex xs4 sm3 md2 mt-1 mb-1 class="scr-img-wrap">
-            <v-img
-              src="https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_.jpg"
-              class="screening_img"
-              contain
-              aspect-ratio="1.75"
-              left
-            ></v-img>
-          </v-flex>
-          <v-flex xs8 sm9 md10>
+            <v-flex xs4 sm3 md2 mt-1 mb-1 class="scr-img-wrap">
+              <v-img
+                :src="event.avaUrl"
+                class="screening_img"
+                contain
+                aspect-ratio="1.75"
+                left
+              ></v-img>
+            </v-flex>
+            <v-flex xs8 sm9 md10>
             <v-card-title class="custom_title">
               <div>
-                <div class="headline">Показ к/ф Blade Runner 2049</div>
+                <div class="headline">{{event.title}}</div>
               </div>
             </v-card-title>
-            <div class="title custom_title">Создатель: John Doe</div>
+            <div class="title custom_title">Создатель: {{event.author.login}}</div>
+            <div class="title custom_title">Место: {{event.place.name}}</div>
             <div
               class="screening-desc"
-            >Officer K (Ryan Gosling), a new blade runner for the Los Angeles Police Department, unearths a long-buried secret that has the potential to plunge what's left of society into chaos. His discovery leads him on a quest to find Rick Deckard (Harrison Ford), a former blade runner who's been missing for 30 years.</div>
+            >{{event.description}}</div>
           </v-flex>
         </v-layout>
         <v-divider light></v-divider>
-        <v-card-actions class="pa-3 ml-2">Тэги: #sci-fi #bladerunner #gosling #ford</v-card-actions>
+        <v-card-actions class="pa-3 ml-2">Тэги: <span class="tag" v-for="tag in event.keywords" :key="tag">{{tag}}</span></v-card-actions>
       </v-card>
     </v-flex>
   </v-container>
@@ -63,20 +68,39 @@
 export default {
   data() {
     return {
-      array: [
-        {
-          id: 1
-        },
-        {
-          id: 2
-        },
-        {
-          id: 3
-        }
-      ]
+      filters : "",
+      array: []
     };
   },
-  methods: {}
+  async created(){
+    try{
+      const result = await this.$store.dispatch("getEvents", {
+              page: 1,
+              per_page: 5,
+              filters: ""
+            });
+      this.array = result.data;
+
+    }catch(err) {console.error(err);}
+  },
+  // watch: {
+  //   // эта функция запускается при любом изменении вопроса
+  //   filters: function (newFilt) {
+  //     this.filterSearch(newFilt);
+  //   }
+  // },
+  methods: {
+    async filterSearch(){
+      try{
+      const result = await this.$store.dispatch("getEvents", {
+              page: 1,
+              per_page: 5,
+              filters: this.filters
+            });
+      this.array = result.data;
+      }catch(err) {console.error(err);}
+    }
+  }
 };
 </script>
 
@@ -87,6 +111,9 @@ export default {
 }
 .custom_title {
   padding: 5px;
+}
+.tag{
+  margin:3px;
 }
 .screening-desc {
   overflow-wrap: break-word;
