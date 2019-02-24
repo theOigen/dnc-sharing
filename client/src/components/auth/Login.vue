@@ -35,13 +35,14 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
   data() {
     return {
       login: "",
       password: "",
       error: "",
-      isLoading: false,
+      isLoading: false
     };
   },
   beforeDestroy() {
@@ -51,18 +52,23 @@ export default {
     this.isLoading = false;
   },
   computed: {
-    loggedInUser(){
-      return this.$store.state.auth.loggedInUser
+    loggedInUser() {
+      return this.$store.state.auth.loggedInUser;
     },
     buttonActive() {
-      return this.isLoading || this.errors.any() || !this.login.length || !this.password.length;
+      return (
+        this.isLoading ||
+        this.errors.any() ||
+        !this.login.length ||
+        !this.password.length
+      );
     }
   },
   methods: {
     async logIn() {
       // eslint-disable-next-line
       this.isLoading = true;
-      let result = await this.$store.dispatch("fetchLogin", {
+      const result = await this.$store.dispatch("fetchLogin", {
         password: this.password,
         username: this.login
       });
@@ -70,17 +76,10 @@ export default {
 
       this.isLoading = false;
 
-      
-
-
       console.log(this.loggedInUser);
 
       //if(result.err)
-      if(this.loggedInUser) this.$router.push("/");
-
-
-      console.log("sdasds");
-      console.log("sdasds");
+      if (this.loggedInUser) this.$router.push("/");
     },
     googleLogin() {
       this.$gAuth
@@ -97,42 +96,28 @@ export default {
             googleProf.getEmail()
           );
 
-
           const email = googleProf.getEmail();
-          const atIndex = email.indexOf('@');
-          const username = email.substring(0, atIndex != -1 ? atIndex : email.length);
+          const atIndex = email.indexOf("@");
+          const username = email.substring(
+            0,
+            atIndex !== -1 ? atIndex : email.length
+          );
           console.log(username);
           this.isLoading = true;
 
-          let result = await this.$store.dispatch("fetchOauth", {
+          const result = await this.$store.dispatch("fetchOauth", {
             googleId: googleProf.getId(),
             username: username,
             fullname: googleProf.getName(),
-            ava_url : googleProf.getImageUrl()
+            ava_url: googleProf.getImageUrl()
           });
 
-          
           this.isLoading = false;
-
 
           console.log(this.loggedInUser);
 
-          //if(result.err)
-          if(this.loggedInUser) this.$router.push("/");
-
-          // return this.$store.dispatch("googleLogin", {
-          //   user: {
-          //     googleId: googleProf.getId(),
-          //     name: googleProf.getName(),
-          //     avaUrl: googleProf.getImageUrl(),
-          //     email: googleProf.getEmail()
-          //   }
-          // });
+          if (this.loggedInUser) this.$router.push("/");
         })
-        // .then(user => {
-        //   this.$socket.emit("loggedUser", user._id);
-        //   this.$router.push("/");
-        // })
         .catch(error => {
           // eslint-disable-next-line
           console.error(error);

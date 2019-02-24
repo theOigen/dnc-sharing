@@ -22,7 +22,7 @@
         xs10
         md10
       ></v-text-field>
-      <v-btn xs2 md2 class="my-3" icon small to="/new_showing">
+      <v-btn xs2 md2 class="my-3" icon small to="/newShowing">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
       <!-- <input type="text" placeholder="search by tags"> -->

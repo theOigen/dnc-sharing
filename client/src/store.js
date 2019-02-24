@@ -5,6 +5,7 @@ import axios from 'axios';
 axios.defaults.baseURL = "http://localhost:3014";
 Vue.use(Vuex);
 
+/* eslint-disable */
 
 async function getAuthUser() {
     let user, err = null;
@@ -29,7 +30,7 @@ async function getAuthUser() {
         err = "JWT is missing. Log in first";
         console.log(err);
     }
-    return  {user, err};
+    return { user, err };
 }
 
 
@@ -70,7 +71,7 @@ export default new Vuex.Store({
             state.auth.authError = payload.err;
         },
         logout(state) {
-            console.log("LOGGIN OUT");
+            console.log("LOGGED OUT");
             state.auth.loggedInUser = null;
             state.auth.isFetchingAuth = false;
             state.auth.authError = null;
@@ -86,13 +87,12 @@ export default new Vuex.Store({
         async fetchLogin({ commit }, { password, username }) {
             commit("requestLogin");
             let res = { user: null, err: null };
-             const bodyData = new URLSearchParams({
+            const bodyData = new URLSearchParams({
                 username,
                 password
-             });
+            });
             try {
-
-                let authResult = await axios.post('/auth/login', bodyData);
+                const authResult = await axios.post('/auth/login', bodyData);
                 console.log(authResult.data);
                 if (authResult.data.err) throw new Error(authResult.err);
                 const jwt = authResult.data.token;
@@ -105,10 +105,10 @@ export default new Vuex.Store({
             commit("receiveLogin", res);
             return res;
         },
-        async fetchRegister({commit}, {password, username, fullname}){
+        async fetchRegister({ commit }, { password, username, fullname }) {
             commit("requestLogin");
-            let res = {user: null,  err: null };
-             const bodyData = new URLSearchParams({
+            let res = { user: null, err: null };
+            const bodyData = new URLSearchParams({
                 username,
                 password,
                 fullname
@@ -124,26 +124,25 @@ export default new Vuex.Store({
                 res.err = error.response.data.err;
                 console.log(res.err);
             }
-            commit("receiveLogin", {user: null, err: res.err});
+            commit("receiveLogin", { user: null, err: res.err });
             return res;
         },
-        async fetchOauth({commit}, {googleId, username, ava_url, fullname}){
+        async fetchOauth({ commit }, { googleId, username, ava_url, fullname }) {
             commit("requestLogin");
-            let res = {user: null,  err: null };
-             const bodyData = new URLSearchParams({
+            let res = { user: null, err: null };
+            const bodyData = new URLSearchParams({
                 username,
                 googleId,
                 ava_url,
                 fullname
             });
             try {
-
                 let authResult = await axios.post('/auth/oauth/login', bodyData);
                 console.log("DATA FROM OAUTH");
                 console.log(authResult.data);
                 if (authResult.data.err) throw new Error(authResult.err);
                 const jwt = authResult.data.token;
-                localStorage.setItem("jwt", jwt); 
+                localStorage.setItem("jwt", jwt);
                 res.user = authResult.data.user;
             } catch (error) {
                 res.err = error.response.data.err;
