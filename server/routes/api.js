@@ -42,15 +42,15 @@ router.get('/event', async (req, res) => {
                     && (event.title.includes(key)
                         || event.keywords.includes(key)
                         || event.description.includes(key));
-                if (event.title.includes(key)) console.log(`${key} there is in title ${event.title}`)
-                if (event.keywords.includes(key)) console.log(`${key} there is in keywords ${event.keywords}`)
-                if (event.description.includes(key)) console.log(`${key} there is in description ${event.description}`)
+                if (event.title.includes(key)) console.log(`${key} there is in title ${event.title}`);
+                if (event.keywords.includes(key)) console.log(`${key} there is in keywords ${event.keywords}`);
+                if (event.description.includes(key)) console.log(`${key} there is in description ${event.description}`);
             });
             if (isAvailable) {
                 result.push(event);
             }
         });
-    console.log(result)
+    console.log(result);
     res.json(pagination(result, page, per_page));
 });
 
@@ -75,32 +75,33 @@ router.delete('/event/:id',
         }
     });
 
+
 router.put('/user/:id',
     authJwt,
     async (req, res) => {
         try {
-            console.log('id', req.params.id)
-            console.log('_id',req.user._id)
-            if (!req.params.id || req.user._id != req.params.id )
+            console.log('id', req.params.id);
+            console.log('_id',req.user._id);
+            if (!req.params.id || req.user._id.toString() !== req.params.id )
                 throw new Error("Forbidden");
-            req.user.fullname = req.body.fullname ? req.body.fullname : req.user.fullname
-            req.user.description = req.body.description ? req.body.description : req.user.description
+            req.user.fullname = req.body.fullname ? req.body.fullname : req.user.fullname;
+            req.user.description = req.body.description ? req.body.description : req.user.description;
             if (req.files.ava) {
-                await Utils.delete_file_promised(req.user.ava_url.substring(req.user.ava_url.lastIndexOf('/') + 1));
+                //await Utils.delete_file_promised(req.user.ava_url.substring(req.user.ava_url.lastIndexOf('/') + 1));
                 const result = await Utils.handle_file_upload_promised(Buffer.from(new Uint8Array(req.files.ava.data)));
                 req.user.ava_url = result.url;
             }
-            res.json(await User.update(req.user))
+            res.json({user: await User.update(req.user)});
         }
         catch (err) {
-            res.status(400).json({ err: err.message })
+            res.status(400).json({ err: err.message });
         }
         
     });
 router.post('/event',
     authJwt,
     async (req, res) => {
-        console.log('i am there')
+        console.log('i am there');
         console.log(req.body);
         try {
             if (!req.user)
@@ -119,13 +120,14 @@ router.post('/event',
     });
 router.post('/test', (req, res) => {
     const c = req.body.coordinates;
-    const x = parseFloat(c.substring(c.indexOf('(') + 1, c.indexOf(',')))
-    const y = parseFloat(c.substring(c.indexOf(',') + 2, c.indexOf(')')))
+
+    const x = parseFloat(c.substring(c.indexOf('(') + 1, c.indexOf(',')));
+    const y = parseFloat(c.substring(c.indexOf(',') + 2, c.indexOf(')')));
     Placement.insert(
         new Placement(req.body.name, x, y)
-    )
+    );
     res.json({});
-})
+});
 
 
 

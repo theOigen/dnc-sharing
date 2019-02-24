@@ -43,9 +43,19 @@ export default new Vuex.Store({
             isFetchingAuth: false,
             authError: null,
             initialAuthError: null
+        },
+        user:{
+          isFetchingUpdate: false,
+          oldUser: null
         }
     },
     mutations: {
+        requestUserUpdate(state){
+            state.user.isFetchingUpdate = true;
+        },
+        receiveUserUpdare(state){
+            state.user.isFetchingUpdate = false;
+        },
         requestInitialAuth(state) {
             state.auth.loggedInUser = null;
             state.auth.isFetchingInitialAuth = true;
@@ -90,6 +100,32 @@ export default new Vuex.Store({
             const response = await axios.get(url);
             console.log(response.data);
             return response.data;
+            
+        },
+        async fetchUserUpdate ({ commit }, { id, fullname, description, ava }){
+            const jwt = localStorage.getItem("jwt");
+            const config = {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + jwt
+              }
+            };
+
+            const res ={err: null, user: null};
+            const formData = new FormData();
+            formData.append("fullname", fullname);
+            formData.append("description", description);
+            if(ava) formData.append("ava", ava);
+            try{
+                const response = await axios.put(`/api/v1/user/${id.toString()}`, formData, config);
+                res.user = response.data.user;
+
+            }catch(err){
+                console.error(err);
+                res.err = err.response.data.err;;
+            }
+            return res;
+
             
         },
         NewEvent(context, credentials) {

@@ -3,10 +3,12 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Login from './components/auth/Login.vue'
-import Test from './components/test.vue'
+// import Test from './components/test.vue'
 import Register from './components/auth/Register.vue'
 import NewShowing from './components/showing/NewShowing.vue'
 import Profile from './components/user/Profile.vue'
+import Logout from './components/auth/Logout.vue'
+import Showing from './components/showing/Showing.vue'
 import store from './store'
 
 Vue.use(Router)
@@ -29,6 +31,20 @@ const router = new Router({
             path: '/about',
             name: 'about',
             component: About
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: Logout,
+            meta: {
+                requiresAuth: true
+            }
+        },
+        {
+            path: '/showing',
+            name: 'showing',
+            component: Showing,
+            props: true
         },
         {
             path: '/profile',
