@@ -45,7 +45,7 @@
         ></v-text-field>
         <v-layout row justify-center>
           <v-btn @click="logIn" :disabled="buttonActive">Войти</v-btn>
-          <v-btn @click="googleLogin">
+          <v-btn @click="googleLogin" :disabled="this.isLoading">
             <v-icon>mdi-google</v-icon>
           </v-btn>
         </v-layout>
@@ -75,8 +75,12 @@ export default {
     this.isLoading = false;
   },
   computed: {
+    loggedInUser(){
+      return this.$store.state.auth.loggedInUser
+    },
     buttonActive() {
       return (
+        this.isLoading || 
         this.errors.any() ||
         !this.login.length ||
         !this.password.length ||
@@ -86,14 +90,25 @@ export default {
     }
   },
   methods: {
-    logIn() {
+    async logIn() {
       // eslint-disable-next-line
+      this.isLoading = true;
+      let result = await this.$store.dispatch("fetchRegister", {
+        password: this.password,
+        username: this.login,
+        fullname: this.fullname
+      });
+      console.log(result);
+
+      this.isLoading = false;
+      if(result.user) this.$router.push("/");
+
       console.log("sdasds");
     },
     googleLogin() {
       this.$gAuth
         .signIn()
-        .then(googleUser => {
+        .then(async googleUser => {
           // eslint-disable-next-line
           console.log("USER: ", googleUser);
           const googleProf = googleUser.getBasicProfile();
@@ -104,6 +119,30 @@ export default {
             googleProf.getImageUrl(),
             googleProf.getEmail()
           );
+
+
+          const email = googleProf.getEmail();
+          const atIndex = email.indexOf('@');
+          const username = email.substring(0, atIndex != -1 ? atIndex : email.length);
+          console.log(username);
+          this.isLoading = true;
+
+          let result = await this.$store.dispatch("fetchOauth", {
+            googleId: googleProf.getId(),
+            username: username,
+            fullname: googleProf.getName(),
+            ava_url : googleProf.getImageUrl()
+          });
+
+          
+          this.isLoading = false;
+
+
+          console.log(this.loggedInUser);
+
+          //if(result.err)
+          if(this.loggedInUser) this.$router.push("/");
+
           // return this.$store.dispatch("googleLogin", {
           //   user: {
           //     googleId: googleProf.getId(),
