@@ -87,11 +87,11 @@ router.put('/user/:id',
             req.user.fullname = req.body.fullname ? req.body.fullname : req.user.fullname;
             req.user.description = req.body.description ? req.body.description : req.user.description;
             if (req.files.ava) {
-                await Utils.delete_file_promised(req.user.ava_url.substring(req.user.ava_url.lastIndexOf('/') + 1));
+                //await Utils.delete_file_promised(req.user.ava_url.substring(req.user.ava_url.lastIndexOf('/') + 1));
                 const result = await Utils.handle_file_upload_promised(Buffer.from(new Uint8Array(req.files.ava.data)));
                 req.user.ava_url = result.url;
             }
-            res.json(await User.update(req.user));
+            res.json({user: await User.update(req.user)});
         }
         catch (err) {
             res.status(400).json({ err: err.message });
