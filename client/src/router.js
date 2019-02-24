@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Login from './components/auth/Login.vue'
-// import Test from './components/test.vue'
+ import Test from './components/test.vue'
 import Register from './components/auth/Register.vue'
 import NewShowing from './components/showing/NewShowing.vue'
 import Profile from './components/user/Profile.vue'
@@ -21,6 +21,11 @@ const router = new Router({
             path: '/',
             name: 'home',
             component: Home
+        },
+        {
+            path: '/test',
+            name: 'test',
+            component: Test
         },
         {
             path: '/about',
@@ -57,6 +62,15 @@ const router = new Router({
             meta: {
                 requiresVisitor: true
             }
+        },
+        {
+            path: '/profile',
+            name: 'profile',
+            component: Profile,
+            meta: {
+                requiresAuth: true
+            },
+            props: true
         },
         {
             path: '/register',

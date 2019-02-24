@@ -8,12 +8,27 @@
         </v-avatar>
       </v-flex>
       <v-tabs slot="extension" v-model="model" centered slider-color="yellow">
-        <v-tab v-for="i in 3" :key="i" :href="`#tab-${i}`">Item {{ i }}</v-tab>
+        <v-tab :href="`#Описание`">Описание</v-tab>
+        <v-tab :href="`#Карта`">Локация</v-tab>
+        <v-tab :href="`#Обсуждение`">Обсуждение</v-tab>
       </v-tabs>
       <v-tabs-items v-model="model">
-        <v-tab-item v-for="i in 3" :key="i" :value="`tab-${i}`">
+        <v-tab-item :value="`Описание`">
           <v-card flat>
-            <v-card-text v-text="text"></v-card-text>
+            <v-card-text v-text="event.description"></v-card-text>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item :value="`Карта`">
+          <v-card flat>
+            <v-layout row justify-center>
+              <mapa :markerName="event.place.name" :markerLat="event.place.location.coordinates[0]" :markerLng="event.place.location.coordinates[1]"></mapa>
+            </v-layout>
+          </v-card>
+        </v-tab-item>
+        <v-tab-item :value="`Обсуждение`">
+          <v-card flat>
+            <v-card-text v-text="event.description">
+            </v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs-items>
@@ -23,8 +38,12 @@
 </template>
 
 <script>
+import Mapa from "./Map";
 export default {
   name: "showing",
+  components: {
+    Mapa
+  },
   props: {
     event: {
       type: Object

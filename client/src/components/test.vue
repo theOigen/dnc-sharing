@@ -1,54 +1,19 @@
 <template>
-  <div>
-    <label>AutoComplete
-      <GmapAutocomplete @place_changed="setPlace"></GmapAutocomplete>
-      <button @click="usePlace">Add</button>
-    </label>
-    <br>
-
-    <GmapMap style="width: 600px; height: 300px;" :zoom="1" :center="{lat: 0, lng: 0}">
-      <GmapMarker v-for="(marker, index) in markers" :key="index" :position="marker.position"/>
-      <GmapMarker
-        v-if="this.place"
-        label="★"
-        :position="{
-          lat: this.place.geometry.location.lat(),
-          lng: this.place.geometry.location.lng(),
-        }"
-      />
-    </GmapMap>
-  </div>
+  <mapa :markerName="marker" :markerLat="lat" :markerLng="lng"></mapa>
 </template>
 
 <script>
+import Mapa from "./showing/Map";
 export default {
   data() {
     return {
-      markers: [],
-      place: null
+      marker: "провулок Електриків, 15, Київ, Украина, 02000",
+      lat: 50.4809026,
+      lng: 30.51126929999998
     };
   },
-  description: "Autocomplete Example (#164)",
-  methods: {
-    setDescription(description) {
-      this.description = description;
-    },
-    setPlace(place) {
-      this.place = place;
-    },
-    usePlace() {
-        this.$store.dispatch("test", {location:this.place})
-        console.log('place', this.place)
-      if (this.place) {
-        this.markers.push({
-          position: {
-            lat: this.place.geometry.location.lat(),
-            lng: this.place.geometry.location.lng()
-          }
-        });
-        this.place = null;
-      }
-    }
-  }
+  components: {
+    Mapa
+  },
 };
 </script>
