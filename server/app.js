@@ -35,7 +35,7 @@ const connectOptions = {
 mongoose.connect(config.mongo_url, connectOptions)
     .then((x) => {
         console.log("Mongo database connected " + mongoose.connection);
-        app.listen(config.port, function () { console.log('Server is ready\n' + publicPath); });
+        app.listen(config.port, function () { console.log(`Server is ready on port ${config.port}\n` + publicPath); });
     })
     .catch((err) => console.log("ERROR: " + err.message));
 

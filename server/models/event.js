@@ -5,20 +5,10 @@ const EventSchema = new mongoose.Schema({
     description: { type: String, require: true },
     isOpen: { type: Boolean, default: true },
     author: { type: mongoose.mongo.ObjectId, ref: "User", required: true },
+    place: { type: mongoose.mongo.ObjectId, ref: "User", required: true },
     avaUrl: { type: String, require: true },
     keywords: [{ type: String, require: true }],
     addedAt: { type: Date, default: Date.now },
-    location: {
-        type: {
-          type: String, // Don't do `{ location: { type: String } }`
-          enum: ['Point'], // 'location.type' must be 'Point'
-          default: 'Point'
-        },
-        coordinates: {
-          type: [Number],
-          required: true
-        }
-      }
 });
 
 const EventModel = mongoose.model('Event', EventSchema);
@@ -26,14 +16,14 @@ const EventModel = mongoose.model('Event', EventSchema);
 
 
 class Event extends Storage {
-    constructor(title, description, author, avaUrl, keywords, location) {
+    constructor(title, description, author, avaUrl, keywords, place) {
         super();
         this.title = title;
         this.description = description;
         this.author = author;
         this.avaUrl = avaUrl;
         this.keywords = keywords;
-        this.location = location;
+        this.place = place;
     }
 
     static this_model() {

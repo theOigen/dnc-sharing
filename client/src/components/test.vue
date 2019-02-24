@@ -37,6 +37,7 @@ export default {
       this.place = place;
     },
     usePlace() {
+        this.$store.dispatch("test", {location:this.place})
         console.log('place', this.place)
       if (this.place) {
         this.markers.push({
